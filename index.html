@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mațuca pe Baraj</title>
+  
+  <!-- Fonturi noi specifice jocurilor de pescuit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="game-container">
+    
+    <!-- Header cu Titlu Centrat -->
+    <header class="game-header">
+      <div class="title-wrap">
+        <h1>MAȚUCA PE BARAJ</h1>
+        <span class="sub-title">SUBCETATE EDITION</span>
+      </div>
+      <button id="btnSettings" class="icon-btn" aria-label="Setări">⚙️</button>
+    </header>
+
+    <!-- Bara de Progres Free Spins (Noua structură cu Iconițe) -->
+    <div id="fsProgressBar" class="fs-progress-bar hidden">
+      <div class="fs-header">
+        <span class="fs-counter-text">ROTIRI: <span id="fsCount">0</span></span>
+      </div>
+      <div class="trail-container" id="trailContainer">
+        <!-- Iconițele și multiplicatorii se vor genera automat prin JavaScript -->
+      </div>
+    </div>
+
+    <!-- Mascota Mațuca așezată deasupra rolelor -->
+    <div class="mascot-container">
+      <img src="assets/matuca.png" alt="Mațuca" class="mascot-img" onerror="this.style.display='none'">
+    </div>
+
+    <!-- Zona Rolelor -->
+    <div class="slot-machine">
+      <div class="reels-frame" id="reelsFrame">
+        <div class="reel" id="reel-0"></div>
+        <div class="reel" id="reel-1"></div>
+        <div class="reel" id="reel-2"></div>
+        <div class="reel" id="reel-3"></div>
+        <div class="reel" id="reel-4"></div>
+      </div>
+
+      <div id="eventOverlay" class="event-overlay hidden">
+        <div id="eventCard" class="event-card">
+          <div id="eventEmoji" class="event-emoji"></div>
+          <h2 id="eventTitle"></h2>
+          <p id="eventDesc"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-panel">
+      <div id="statusMessage" class="status-message">Apasă Lansează pentru a pescui pe baraj!</div>
+      <div class="win-display">CÂȘTIG: <span id="winAmount">0.00</span> Lei</div>
+    </div>
+
+    <footer class="controls-panel">
+      <div class="info-block">
+        <span class="label">SOLD</span>
+        <span class="value" id="balanceDisplay">1000.00</span>
+      </div>
+
+      <button id="btnSpin" class="spin-btn">LANSEAZĂ</button>
+
+      <div class="info-block">
+        <span class="label">MIZĂ</span>
+        <span class="value" id="betDisplay">5.00</span>
+      </div>
+    </footer>
+  </div>
+
+  <div id="modalSettings" class="modal-backdrop hidden">
+    <div class="modal-window">
+      <h3>Setări Baraj</h3>
+      
+      <div class="setting-row">
+        <label for="selectBet">Miză Spin (Lei):</label>
+        <select id="selectBet">
+          <option value="1">1.00</option>
+          <option value="2">2.00</option>
+          <option value="5" selected>5.00</option>
+          <option value="10">10.00</option>
+          <option value="20">20.00</option>
+          <option value="50">50.00</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <label for="chkTurbo">Turbo Spin:</label>
+        <input type="checkbox" id="chkTurbo">
+      </div>
+
+      <div class="setting-row">
+        <label for="chkSound">Sunet:</label>
+        <input type="checkbox" id="chkSound" checked>
+      </div>
+
+      <button id="btnCloseSettings" class="action-btn">Salvează</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
