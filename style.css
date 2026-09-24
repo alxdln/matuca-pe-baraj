@@ -36,17 +36,16 @@ body {
   overscroll-behavior: none;
 }
 
-/* Modificat din space-between în center pentru a opri lăbărțarea */
 .game-container {
   width: 100%;
   max-width: 440px;
   height: 100dvh;
-  max-height: 850px; /* Limită maximă strictă */
+  max-height: 850px;
   margin: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Grupează totul pe centru */
-  gap: clamp(8px, 1.5dvh, 16px); /* Spațiu uniform între secțiuni */
+  justify-content: center;
+  gap: clamp(8px, 1.5dvh, 16px);
   padding: 10px 12px;
 }
 
@@ -177,24 +176,25 @@ body {
 /* Slot Machine Grid */
 .slot-machine {
   position: relative;
-  /* Margine sus rezervată pentru a lăsa loc mascotei să iasă din cadru */
-  margin-top: clamp(35px, 8dvh, 50px);
+  margin-top: clamp(35px, 10vw, 55px); 
   background: var(--bg-frame);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 3px solid var(--ocean-blue);
   border-radius: 12px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(17, 153, 142, 0.5);
-  padding: clamp(6px, 1.5dvh, 10px);
-  overflow: visible; /* CRITIC: ca Mațuca să poată ieși peste conturul slotului */
+  /* REZOLVAREA AICI: Padding-top mărit pentru a face loc mascotei înăuntru */
+  padding: clamp(35px, 8vw, 42px) clamp(4px, 1vw, 6px) clamp(4px, 1vw, 6px);
+  overflow: visible;
 }
 
-/* Noua ancorare absolută a mascotei pentru a fi complet lipită de marginea de sus */
+/* Mascota ancorată și trasă puțin mai sus */
 .mascot-container {
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
+  /* 65% deasupra liniei, 35% dedesubt (în padding-ul adăugat mai sus) */
+  transform: translate(-50%, -65%);
   z-index: 10;
   display: flex;
   justify-content: center;
@@ -202,8 +202,8 @@ body {
 }
 
 .mascot-img {
-  width: clamp(75px, 22vw, 115px);
-  height: clamp(75px, 22vw, 115px);
+  width: clamp(75px, 20vw, 105px);
+  height: clamp(75px, 20vw, 105px);
   border-radius: 50%;
   object-fit: cover;
   border: clamp(2px, 1vw, 4px) solid var(--gold);
@@ -302,7 +302,7 @@ body {
   z-index: 20;
   animation: fadeIn 0.3s ease;
   cursor: pointer;
-  border-radius: 12px; /* Marginile la overlay să match-uiască slotul */
+  border-radius: 12px;
 }
 
 .event-card {
