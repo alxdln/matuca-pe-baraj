@@ -5,7 +5,7 @@
   --gold-glow: rgba(255, 204, 0, 0.6);
   --neon-green: #38ef7d;
   --ocean-blue: #11998e;
-  --cell-h: 88px;
+  --cell-h: clamp(55px, 12dvh, 88px);
 }
 
 * {
@@ -17,7 +17,6 @@
   font-family: 'Nunito', sans-serif;
 }
 
-/* Fundal cu Barajul Subcetate + Nuanțe Acvatice */
 body {
   background-color: var(--bg-water);
   background-image: 
@@ -27,21 +26,27 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   color: #fff;
-  min-height: 100vh;
+  height: 100dvh; 
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  overflow: hidden; 
+  touch-action: none; 
+  overscroll-behavior: none;
 }
 
+/* Modificat din space-between în center pentru a opri lăbărțarea */
 .game-container {
   width: 100%;
   max-width: 440px;
-  height: 100vh;
-  max-height: 880px;
+  height: 100dvh;
+  max-height: 850px; /* Limită maximă strictă */
+  margin: auto;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center; /* Grupează totul pe centru */
+  gap: clamp(8px, 1.5dvh, 16px); /* Spațiu uniform între secțiuni */
   padding: 10px 12px;
 }
 
@@ -51,8 +56,7 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
-  margin-top: 10px;
-  margin-bottom: 5px;
+  margin-top: clamp(2px, 1dvh, 10px);
 }
 
 .title-wrap {
@@ -61,7 +65,7 @@ body {
 
 .title-wrap h1 {
   font-family: 'Luckiest Guy', cursive;
-  font-size: 2.1rem;
+  font-size: clamp(1.4rem, 6vw, 2.1rem); 
   letter-spacing: 2px;
   background: linear-gradient(180deg, #a8ff78 0%, #38ef7d 50%, #11998e 100%);
   -webkit-background-clip: text;
@@ -71,7 +75,7 @@ body {
 }
 
 .sub-title {
-  font-size: 0.85rem;
+  font-size: clamp(0.6rem, 2.5vw, 0.85rem);
   color: #a8ff78;
   font-weight: 900;
   letter-spacing: 1.5px;
@@ -85,10 +89,10 @@ body {
   background: rgba(17, 153, 142, 0.6);
   border: 2px solid var(--neon-green);
   color: #fff;
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 4vw, 1.1rem);
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: clamp(28px, 8vw, 36px);
+  height: clamp(28px, 8vw, 36px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -96,36 +100,15 @@ body {
   box-shadow: 0 0 10px rgba(56, 239, 125, 0.4);
 }
 
-/* Mascota Mațuca (Centrată deasupra rolelor) */
-.mascot-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: -35px;
-  z-index: 10;
-  position: relative;
-}
-
-.mascot-img {
-  width: 38%;
-  max-width: 130px;
-  height: auto;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid var(--gold);
-  background: #0b1a2b;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.8), 0 0 20px var(--gold-glow);
-}
-
 /* Bara de Progres (Trail) */
 .fs-progress-bar {
   background: rgba(6, 25, 36, 0.95);
   border: 2px solid var(--neon-green);
   border-radius: 12px;
-  padding: 6px 10px;
+  padding: clamp(4px, 1dvh, 6px) 10px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 5px;
+  gap: clamp(2px, 1dvh, 6px);
   box-shadow: 0 4px 10px rgba(0,0,0,0.6);
 }
 
@@ -137,7 +120,7 @@ body {
 .fs-counter-text {
   font-family: 'Luckiest Guy', cursive;
   color: var(--neon-green);
-  font-size: 1rem;
+  font-size: clamp(0.8rem, 3.5vw, 1rem);
   letter-spacing: 1px;
 }
 
@@ -150,12 +133,12 @@ body {
 
 .trail-group {
   display: flex;
-  gap: 1.5px;
+  gap: 1px;
 }
 
 .trail-icon {
-  width: 13px;
-  height: 13px;
+  width: clamp(10px, 2.5vw, 13px);
+  height: clamp(10px, 2.5vw, 13px);
   border-radius: 50%;
   border: 1px solid rgba(17, 153, 142, 0.5);
   opacity: 0.3;
@@ -176,7 +159,7 @@ body {
   background: #0b1a2b;
   color: rgba(255,255,255,0.4);
   font-family: 'Luckiest Guy', cursive;
-  font-size: 0.7rem;
+  font-size: clamp(0.6rem, 2.5vw, 0.7rem);
   padding: 1px 4px;
   border-radius: 4px;
   border: 1px solid #11998e;
@@ -194,21 +177,44 @@ body {
 /* Slot Machine Grid */
 .slot-machine {
   position: relative;
+  /* Margine sus rezervată pentru a lăsa loc mascotei să iasă din cadru */
+  margin-top: clamp(35px, 8dvh, 50px);
   background: var(--bg-frame);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 3px solid var(--ocean-blue);
   border-radius: 12px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(17, 153, 142, 0.5);
-  padding: 16px 6px 6px 6px;
-  overflow: hidden;
+  padding: clamp(6px, 1.5dvh, 10px);
+  overflow: visible; /* CRITIC: ca Mațuca să poată ieși peste conturul slotului */
+}
+
+/* Noua ancorare absolută a mascotei pentru a fi complet lipită de marginea de sus */
+.mascot-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  pointer-events: none; 
+}
+
+.mascot-img {
+  width: clamp(75px, 22vw, 115px);
+  height: clamp(75px, 22vw, 115px);
+  border-radius: 50%;
+  object-fit: cover;
+  border: clamp(2px, 1vw, 4px) solid var(--gold);
+  background: #0b1a2b;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8), 0 0 15px var(--gold-glow);
 }
 
 .reels-frame {
   display: grid;
-  /* Blocăm strict lățimea coloanelor ca să nu mai „sară” grila */
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 4px;
+  grid-template-columns: repeat(5, minmax(0, 1fr)); 
+  gap: clamp(2px, 1vw, 4px);
   background: rgba(3, 11, 18, 0.9);
   border-radius: 8px;
   overflow: hidden;
@@ -220,42 +226,42 @@ body {
   will-change: transform;
 }
 
-/* Celule */
+/* Celule Scalabile */
 .cell {
   height: var(--cell-h);
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 8px 4px 0 4px; /* Padding lateral adăugat */
+  padding: clamp(4px, 1dvh, 8px) 2px 0 2px;
   align-items: center;
   position: relative;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .cell img {
-  width: 52px;
-  height: 52px;
+  width: clamp(28px, min(14vw, 8dvh), 52px);
+  height: clamp(28px, min(14vw, 8dvh), 52px);
   object-fit: cover;
   border-radius: 50%;
-  border: none; /* Eliminăm complet orice border pentru a preveni decalarile */
+  border: none;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
 }
 
 .cell-fallback {
-  width: 52px;
-  height: 52px;
+  width: clamp(28px, min(14vw, 8dvh), 52px);
+  height: clamp(28px, min(14vw, 8dvh), 52px);
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.6rem;
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
   background: #0f2c42;
   border: none;
 }
 
 .cell-label {
-  font-size: 0.65rem;
+  font-size: clamp(0.55rem, 2.5vw, 0.65rem);
   font-weight: 900;
   margin-top: 2px;
   color: #a8ff78;
@@ -265,7 +271,7 @@ body {
 
 .scatter-label {
   font-family: 'Luckiest Guy', cursive !important;
-  font-size: 1.1rem !important;
+  font-size: clamp(0.8rem, min(3.5vw, 2.5dvh), 1.1rem) !important;
   color: #ff66ff !important;
   margin-top: 1px !important;
   letter-spacing: 0.5px;
@@ -276,8 +282,8 @@ body {
   background: rgba(0, 0, 0, 0.95);
   color: var(--neon-green);
   font-family: 'Luckiest Guy', cursive;
-  font-size: 1.1rem; 
-  padding: 0px 6px;
+  font-size: clamp(0.8rem, min(3.5vw, 2.5dvh), 1.1rem); 
+  padding: 0px clamp(4px, 1vw, 6px);
   border-radius: 6px;
   border: 1px solid var(--ocean-blue);
   text-shadow: 0 1px 3px #000;
@@ -285,7 +291,7 @@ body {
   z-index: 2;
 }
 
-/* Modale & Pop-up-uri Eveniment */
+/* Modale & Pop-up-uri */
 .event-overlay {
   position: absolute;
   inset: 0;
@@ -296,31 +302,32 @@ body {
   z-index: 20;
   animation: fadeIn 0.3s ease;
   cursor: pointer;
+  border-radius: 12px; /* Marginile la overlay să match-uiască slotul */
 }
 
 .event-card {
   text-align: center;
-  padding: 20px;
+  padding: clamp(12px, 3vw, 20px);
   border-radius: 16px;
   background: linear-gradient(135deg, #0b1a2b 0%, #0f2c42 100%);
   border: 2px solid var(--gold);
-  max-width: 85%;
+  max-width: 90%;
   box-shadow: 0 10px 30px rgba(0,0,0,0.9);
 }
 
-.event-emoji { font-size: 3.5rem; margin-bottom: 10px; }
+.event-emoji { font-size: clamp(2.5rem, 8vw, 3.5rem); margin-bottom: 8px; }
 .event-card h2 { 
   font-family: 'Luckiest Guy', cursive; 
-  font-size: 1.4rem; 
+  font-size: clamp(1.1rem, 5vw, 1.4rem); 
   color: var(--gold); 
   margin-bottom: 8px; 
   letter-spacing: 1px;
 }
-.event-card p { font-size: 0.9rem; color: #fff; line-height: 1.4; font-weight: 700; }
+.event-card p { font-size: clamp(0.8rem, 3.5vw, 0.9rem); color: #fff; line-height: 1.4; font-weight: 700; }
 
 .event-image {
-  width: 110px;
-  height: 110px;
+  width: clamp(80px, 25vw, 110px);
+  height: clamp(80px, 25vw, 110px);
   object-fit: cover;
   border-radius: 50%;
   border: 3px solid var(--gold);
@@ -332,20 +339,19 @@ body {
 /* Panou Câștig & Mesaje */
 .status-panel {
   text-align: center;
-  padding: 10px 0;
 }
 
 .status-message {
   font-family: 'Luckiest Guy', cursive;
-  font-size: 1rem;
+  font-size: clamp(0.8rem, 3.5vw, 1rem);
   color: var(--neon-green);
-  min-height: 22px;
+  min-height: clamp(18px, 3dvh, 22px);
   letter-spacing: 0.5px;
 }
 
 .win-display {
   font-family: 'Luckiest Guy', cursive;
-  font-size: 1.4rem;
+  font-size: clamp(1.1rem, 5vw, 1.4rem);
   color: var(--gold);
   margin-top: 4px;
   text-shadow: 0 2px 4px rgba(0,0,0,0.8);
@@ -357,7 +363,7 @@ body {
   justify-content: space-between;
   align-items: center;
   background: rgba(11, 26, 43, 0.95);
-  padding: 10px 16px;
+  padding: clamp(6px, 1.5dvh, 10px) clamp(10px, 3vw, 16px);
   border-radius: 16px;
   border: 2px solid var(--ocean-blue);
   box-shadow: 0 4px 15px rgba(0,0,0,0.6);
@@ -369,7 +375,7 @@ body {
 }
 
 .info-block .label {
-  font-size: 0.65rem;
+  font-size: clamp(0.55rem, 2.5vw, 0.65rem);
   color: #a8ff78;
   font-weight: 900;
   text-transform: uppercase;
@@ -377,36 +383,29 @@ body {
 
 .info-block .value {
   font-family: 'Luckiest Guy', cursive;
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 4vw, 1.1rem);
   color: #fff;
   letter-spacing: 1px;
 }
 
 .spin-btn {
   width: auto;
-  height: 75px;
+  height: clamp(60px, 15dvh, 75px);
   border-radius: 50%;
-  padding: 5px 10px;
-  border: 3px solid #fff;
+  padding: 5px clamp(8px, 3vw, 12px);
+  border: clamp(2px, 1vw, 3px) solid #fff;
   background: radial-gradient(circle, #38ef7d 0%, #11998e 100%);
   color: white;
   font-family: 'Luckiest Guy', cursive;
-  font-size: 1.4rem;
+  font-size: clamp(1rem, 4.5vw, 1.4rem);
   letter-spacing: 1px;
   box-shadow: 0 4px 15px rgba(56, 239, 125, 0.5);
   cursor: pointer;
   transition: transform 0.1s, filter 0.2s;
 }
 
-.spin-btn:active {
-  transform: scale(0.92);
-}
-
-.spin-btn:disabled {
-  filter: grayscale(1);
-  opacity: 0.7;
-  transform: none;
-}
+.spin-btn:active { transform: scale(0.92); }
+.spin-btn:disabled { filter: grayscale(1); opacity: 0.7; transform: none; }
 
 /* Modal Setări */
 .modal-backdrop {
@@ -423,14 +422,14 @@ body {
   background: #0b1a2b;
   border: 2px solid var(--ocean-blue);
   border-radius: 16px;
-  padding: 24px;
+  padding: clamp(16px, 4vw, 24px);
   width: 85%;
   max-width: 320px;
 }
 
 .modal-window h3 {
   font-family: 'Luckiest Guy', cursive;
-  font-size: 1.4rem;
+  font-size: clamp(1.2rem, 5vw, 1.4rem);
   margin-bottom: 16px;
   color: var(--gold);
   text-align: center;
@@ -441,7 +440,7 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 14px;
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 4vw, 1rem);
   font-weight: 700;
 }
 
@@ -462,21 +461,17 @@ body {
   border: none;
   border-radius: 8px;
   font-family: 'Luckiest Guy', cursive;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 4vw, 1.2rem);
   cursor: pointer;
   margin-top: 10px;
   transition: transform 0.1s;
 }
 .action-btn:active { transform: scale(0.95); }
-
 .hidden { display: none !important; }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* Efect vizual Gogoașă (Acum folosește exclusiv box-shadow pentru a nu sări grila) */
+/* Efecte Vizuale Simboluri Active */
 .scatter-symbol img,
 .scatter-symbol .cell-fallback {
   box-shadow: 0 0 0 3px #ff00ff, 0 0 25px rgba(255, 0, 255, 0.9), inset 0 0 15px rgba(255, 0, 255, 0.6) !important;
@@ -484,16 +479,13 @@ body {
   z-index: 3;
 }
 
-.scatter-symbol {
-  z-index: 3;
-}
+.scatter-symbol { z-index: 3; }
 
 @keyframes scatter-pulse {
   from { transform: scale(1); filter: brightness(1); }
-  to { transform: scale(1.2); filter: brightness(1.4) drop-shadow(0 0 8px #ff00ff); }
+  to { transform: scale(1.15); filter: brightness(1.4) drop-shadow(0 0 8px #ff00ff); }
 }
 
-/* Efect pentru simbolurile de pe linia câștigătoare */
 .win-highlight img,
 .win-highlight .cell-fallback {
   box-shadow: 0 0 0 3px var(--neon-green), 0 0 20px rgba(56, 239, 125, 0.8), inset 0 0 10px rgba(56, 239, 125, 0.5) !important;
@@ -501,16 +493,13 @@ body {
   z-index: 2;
 }
 
-.win-highlight {
-  z-index: 2;
-}
+.win-highlight { z-index: 2; }
 
 @keyframes pulse-win {
   from { transform: scale(1); filter: brightness(1); }
-  to { transform: scale(1.18); filter: brightness(1.3); }
+  to { transform: scale(1.15); filter: brightness(1.3); }
 }
 
-/* Evidențiere pești colectați */
 .highlight-fish img,
 .highlight-fish .cell-fallback {
   box-shadow: 0 0 0 3px var(--gold), 0 0 20px var(--gold-glow) !important;
@@ -523,12 +512,12 @@ body {
   to { transform: scale(1.1); filter: brightness(1.5); }
 }
 
-/* Animația sumelor care zboară spre Mațuca */
+/* Sumele Zburătoare */
 .flying-money {
   position: fixed;
   z-index: 9999;
   font-family: 'Luckiest Guy', cursive;
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 5vw, 1.5rem);
   color: var(--neon-green);
   background: rgba(0, 0, 0, 0.85);
   padding: 4px 8px;
