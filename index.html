@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Mațuca pe Baraj</title>
   
-  <!-- Fonturi noi specifice jocurilor de pescuit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
@@ -16,7 +15,6 @@
 
   <div class="game-container">
     
-    <!-- Header cu Titlu Centrat -->
     <header class="game-header">
       <div class="title-wrap">
         <h1>MAȚUCA PE BARAJ</h1>
@@ -25,23 +23,23 @@
       <button id="btnSettings" class="icon-btn" aria-label="Setări">⚙️</button>
     </header>
 
-    <!-- Bara de Progres Free Spins (Noua structură cu Iconițe) -->
     <div id="fsProgressBar" class="fs-progress-bar hidden">
       <div class="fs-header">
         <span class="fs-counter-text">ROTIRI: <span id="fsCount">0</span></span>
       </div>
       <div class="trail-container" id="trailContainer">
-        <!-- Iconițele și multiplicatorii se vor genera automat prin JavaScript -->
+        <!-- Generat din JS -->
       </div>
     </div>
 
-    <!-- Mascota Mațuca așezată deasupra rolelor -->
-    <div class="mascot-container">
-      <img src="assets/matuca.png" alt="Mațuca" class="mascot-img" onerror="this.style.display='none'">
-    </div>
-
-    <!-- Zona Rolelor -->
+    <!-- Zona Rolelor (Mațuca mutat ÎNĂUNTRU pentru a fi ancorat perfect) -->
     <div class="slot-machine">
+      
+      <!-- Mascota Mațuca ancorată de slot -->
+      <div class="mascot-container">
+        <img src="assets/matuca.png" alt="Mațuca" class="mascot-img" onerror="this.style.display='none'">
+      </div>
+
       <div class="reels-frame" id="reelsFrame">
         <div class="reel" id="reel-0"></div>
         <div class="reel" id="reel-1"></div>
