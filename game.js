@@ -1,28 +1,53 @@
 /* =========================================================================
-   CONFIGURAȚIE SIMBOLURI & LINII DE PLATĂ
+   1. ZONA DE SETĂRI - MODIFICĂ AICI PROBABILITĂȚILE ȘI VALORILE
+   ========================================================================= */
+const CONFIG = {
+    // --- SETĂRI MECANICĂ SPECIALĂ ---
+    rotiriExtraPrag: 5,       
+    matucaPerPrag: 4,          
+    sansaSalvareLupu: 0.5,     
+    
+    // --- PROBABILITĂȚI APARIȚIE PERSONAJE (Șanse din 100) ---
+    sansaScatterBase: 7.0,     
+    sansaMatuca: 3.0,          
+    respingereMatuca2: 0.75,   
+    respingereMatuca3: 0.95,   
+    sansaToncea: 1.5,          
+  
+    // --- FRECVENȚĂ PEȘTI (Șanse din 100) ---
+    pestiBase: [4.0, 7.0, 10.0, 17.0], 
+    pestiLvl1: [3.0, 3.5, 4.0, 7.0], 
+    pestiLvl2: [2.5, 3.0, 3.8, 6.5], 
+    pestiLvl3: [2.0, 2.6, 3.6, 6.0], 
+    pestiLvl4: [1.8, 2.4, 3.4, 5.5], 
+    pestiLvl5: [1.5, 2.2, 3.2, 5.0]  
+};
+
+/* =========================================================================
+   2. CONFIGURAȚIE SIMBOLURI & VALORI (TABEL DE PLĂȚI)
    ========================================================================= */
 const SYMBOLS = {
   10:       { name: '10',         type: 'low',     mult: [0, 0, 0.5, 2, 5], emoji: '🔟' },
   J:        { name: 'J',          type: 'low',     mult: [0, 0, 0.5, 2, 5], emoji: '🎣' },
   Q:        { name: 'Q',          type: 'low',     mult: [0, 0, 0.5, 2, 5], emoji: '🪱' },
-  K:        { name: 'K',          type: 'low',     mult: [0, 0, 0.5, 2, 5], emoji: '🍺' },
-  A:        { name: 'A',          type: 'low',     mult: [0, 0, 0.5, 2, 5], emoji: '🛶' },
-  ALBITURI: { name: 'Albituri',   type: 'fish',    mult: [0, 0, 1, 3, 10],  emoji: '🐟', money: [1, 2.5] },
-  CARAS:    { name: 'Caras',      type: 'fish',    mult: [0, 0, 1, 3, 10],  emoji: '🐠', money: [5, 7.5, 10] },
-  CLEAN:    { name: 'Clean',      type: 'fish',    mult: [0, 0, 1, 3, 10],  emoji: '🐡', money: [12.5, 25] },
-  CRAP:     { name: 'Crap',       type: 'fish',    mult: [0, 0, 1, 3, 10],  emoji: '🦈', money: [50, 100, 250] },
+  K:        { name: 'K',          type: 'low',     mult: [0, 0.5, 1, 2, 5], emoji: '🍺' },
+  A:        { name: 'A',          type: 'low',     mult: [0, 1, 2, 5, 10], emoji: '🛶' },
+  ALBITURI: { name: 'Albituri',   type: 'fish',    mult: [0, 0, 1, 3, 10],  emoji: '🐟', money: [1, 2] },
+  CARAS:    { name: 'Caras',      type: 'fish',    mult: [0, 0, 1, 3, 10],  emoji: '🐠', money: [2, 3, 4] },
+  CLEAN:    { name: 'Clean',      type: 'fish',    mult: [0, 0, 1, 3, 10],  emoji: '🐡', money: [5, 10] },
+  CRAP:     { name: 'Crap',       type: 'fish',    mult: [0, 0, 1, 3, 10],  emoji: '🦈', money: [25, 50] }, 
   TONCEA:   { name: 'Toncea 👮',  type: 'char',    mult: [0, 0, 0, 0, 0],   emoji: '👮‍♂️', file: 'assets/toncea.png' },
   LUPU:     { name: 'Dr. Lupu 🩺', type: 'char',   mult: [0, 0, 0, 0, 0],   emoji: '👨‍⚕️', file: 'assets/lupu.png' },
-  SCATTER:  { name: 'Gogoașă', type: 'scatter', mult: [0, 0, 0, 0, 0],   emoji: '🍩', file: 'assets/gogoasa.png' },
+  SCATTER:  { name: 'Gogoașă 🍩', type: 'scatter', mult: [0, 0, 0, 0, 0],   emoji: '🍩', file: 'assets/gogoasa.png' },
   MATUCA:   { name: 'Mațuca 🎣',  type: 'wild',    mult: [0, 0, 0, 0, 0],   emoji: '🧔', file: 'assets/matuca.png' }
 };
 
 const PAYLINES = [
-  [1, 1, 1, 1, 1], // Centru
-  [0, 0, 0, 0, 0], // Sus
-  [2, 2, 2, 2, 2], // Jos
-  [0, 1, 2, 1, 0], // V
-  [2, 1, 0, 1, 2], // V inversat
+  [1, 1, 1, 1, 1], 
+  [0, 0, 0, 0, 0], 
+  [2, 2, 2, 2, 2], 
+  [0, 1, 2, 1, 0], 
+  [2, 1, 0, 1, 2], 
   [0, 0, 1, 2, 2],
   [2, 2, 1, 0, 0],
   [1, 2, 2, 2, 1],
@@ -31,7 +56,7 @@ const PAYLINES = [
 ];
 
 /* =========================================================================
-   STARE JOC & WEB AUDIO API
+   3. STARE JOC & WEB AUDIO API
    ========================================================================= */
 let balance = 1000.0;
 let currentBet = 5.0;
@@ -67,6 +92,13 @@ function playSfx(type) {
       gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
       osc.start(t);
       osc.stop(t + 0.08);
+    } else if (type === 'reel-stop') {
+      osc.frequency.setValueAtTime(100, t);
+      osc.frequency.exponentialRampToValueAtTime(30, t + 0.15);
+      gain.gain.setValueAtTime(0.2, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+      osc.start(t);
+      osc.stop(t + 0.15);
     } else if (type === 'win') {
       [260, 330, 392, 520].forEach(function(freq, i) {
         const o = audioCtx.createOscillator();
@@ -122,27 +154,31 @@ let activeModalResolve = null;
 function initProgressBar() {
   const trail = document.getElementById('trailContainer');
   trail.innerHTML = '';
-  const mults = ['1x', '2x', '3x', '5x', '10x'];
+  // Fără 1x, arătăm doar pragurile finale de cucerit!
+  const mults = ['2x', '3x', '5x', '10x'];
   
-  for(let i=0; i<5; i++) {
-    const tag = document.createElement('div');
-    tag.className = 'multiplier-tag' + (i === 0 ? ' active' : '');
-    tag.id = 'mult-' + i;
-    tag.innerText = mults[i];
-    trail.appendChild(tag);
+  for(let i = 0; i < 4; i++) {
+    const group = document.createElement('div');
+    group.className = 'trail-group';
     
-    if (i < 4) {
-      const group = document.createElement('div');
-      group.className = 'trail-group';
-      for(let j=1; j<=5; j++) {
-        const icon = document.createElement('img');
-        icon.src = 'assets/matuca.png';
-        icon.className = 'trail-icon';
-        icon.id = 'mat-icon-' + (i * 5 + j);
-        group.appendChild(icon);
-      }
-      trail.appendChild(group);
+    // Generăm fix 3 iconițe cu Mațuca per grup
+    for(let j = 1; j <= 3; j++) {
+      const icon = document.createElement('img');
+      icon.src = 'assets/matuca.png';
+      icon.className = 'trail-icon';
+      // Calculăm indexul real (ex: 1, 2, 3... apoi 5, 6, 7...) 
+      icon.id = 'mat-icon-' + (i * CONFIG.matucaPerPrag + j);
+      group.appendChild(icon);
     }
+    
+    // Al 4-lea element este tag-ul multiplicatorului
+    const tag = document.createElement('div');
+    tag.className = 'multiplier-tag';
+    tag.id = 'mult-' + (i + 1); 
+    tag.innerText = mults[i];
+    group.appendChild(tag);
+    
+    trail.appendChild(group);
   }
 }
 
@@ -178,13 +214,14 @@ function renderCell(symKey, moneyVal) {
     imgOrEmoji = '\x3Cdiv class="cell-fallback"\x3E' + sym.emoji + '\x3C/div\x3E';
   }
 
+  let labelTag = '';
   let moneyTag = '';
-  let labelClass = symKey === 'SCATTER' ? 'cell-label scatter-label' : 'cell-label';
-  let labelTag = '\x3Cspan class="' + labelClass + '"\x3E' + sym.name + '\x3C/span\x3E';
 
-  if (moneyVal) {
-    moneyTag = '\x3Cdiv class="money-tag"\x3E' + (moneyVal * currentBet) + '\x3C/div\x3E';
-    labelTag = ''; 
+  // Eliminat complet eticheta Gogoașă din Base Game
+
+  // În timpul specialei, afișăm valoarea peștilor peste iconiță
+  if (isFreeSpins && sym.type === 'fish' && moneyVal) {
+      moneyTag = '\x3Cdiv class="money-tag"\x3E' + (moneyVal * currentBet) + '\x3C/div\x3E';
   }
 
   div.innerHTML = imgOrEmoji + labelTag + moneyTag;
@@ -198,20 +235,35 @@ function getRandomSymbol() {
   const rand = Math.random() * 100;
 
   if (isFreeSpins) {
-    if (rand < 3.5) return 'MATUCA';   
-    if (fsLevel >= 1 && rand < 6.5) return 'TONCEA';   
+    if (rand < CONFIG.sansaMatuca) return 'MATUCA';   
     
-    if (rand < 9.5) return 'CRAP';    
-    if (rand < 13.5) return 'CLEAN';   
-    if (rand < 18.5) return 'CARAS';   
-    if (rand < 28) return 'ALBITURI';
+    let offset = CONFIG.sansaMatuca;
+    if (fsLevel >= 1) {
+        if (rand < offset + CONFIG.sansaToncea) return 'TONCEA';
+        offset += CONFIG.sansaToncea;
+    }
+
+    let cRate = [];
+    if (fsLevel === 0) cRate = CONFIG.pestiLvl1;
+    else if (fsLevel === 1) cRate = CONFIG.pestiLvl2;
+    else if (fsLevel === 2) cRate = CONFIG.pestiLvl3;
+    else if (fsLevel === 3) cRate = CONFIG.pestiLvl4;
+    else cRate = CONFIG.pestiLvl5;
+
+    if (rand < offset + cRate[0]) return 'CRAP'; offset += cRate[0];
+    if (rand < offset + cRate[1]) return 'CLEAN'; offset += cRate[1];
+    if (rand < offset + cRate[2]) return 'CARAS'; offset += cRate[2];
+    if (rand < offset + cRate[3]) return 'ALBITURI';
+    
   } else {
-    if (rand < 7) return 'SCATTER';  
+    if (rand < CONFIG.sansaScatterBase) return 'SCATTER';  
     
-    if (rand < 13) return 'CRAP';    
-    if (rand < 21) return 'CLEAN';   
-    if (rand < 31) return 'CARAS';   
-    if (rand < 50) return 'ALBITURI';
+    let bOff = CONFIG.sansaScatterBase;
+    let bRate = CONFIG.pestiBase;
+    if (rand < bOff + bRate[0]) return 'CRAP'; bOff += bRate[0];
+    if (rand < bOff + bRate[1]) return 'CLEAN'; bOff += bRate[1];
+    if (rand < bOff + bRate[2]) return 'CARAS'; bOff += bRate[2];
+    if (rand < bOff + bRate[3]) return 'ALBITURI';
   }
 
   const lows = ['10', 'J', 'Q', 'K', 'A'];
@@ -239,19 +291,22 @@ async function triggerSpin() {
   stopRequested = false;
   activeSpins = [];
   
+  const reelsFrame = document.getElementById('reelsFrame');
+  reelsFrame.classList.add('is-spinning');
+  
   btnSpin.disabled = false;
   btnSpin.innerText = 'STOP';
   btnSpin.style.background = 'radial-gradient(circle, #ff9900 0%, #aa4400 100%)';
 
   if (!isFreeSpins) {
     balance -= currentBet;
+    winEl.innerText = "0.00"; 
     updateUI();
   } else {
     fsRemaining--;
     fsCountEl.innerText = fsRemaining;
   }
 
-  winEl.innerText = "0.00";
   statusEl.innerText = isFreeSpins ? "Pescuim în specială pe baraj..." : "Plutesc baboii pe lac...";
 
   const matrix = [];
@@ -300,8 +355,11 @@ async function triggerSpin() {
       for (let r = 0; r < 3; r++) {
         if (matrix[c][r] === 'MATUCA') {
           matucasInGrid++;
-          if (matucasInGrid === 3 && Math.random() < 0.95) { 
+          if (matucasInGrid === 2 && Math.random() < CONFIG.respingereMatuca2) { 
             matrix[c][r] = '10';
+            matucasInGrid--;
+          } else if (matucasInGrid === 3 && Math.random() < CONFIG.respingereMatuca3) {
+            matrix[c][r] = '10'; 
             matucasInGrid--;
           } else if (matucasInGrid > 3) {
             matrix[c][r] = '10'; 
@@ -323,11 +381,11 @@ async function triggerSpin() {
     }
   }
 
-  const baseDuration = isTurbo ? 140 : 250;
+  const baseDuration = isTurbo ? 500 : 1200;
   let promises = [];
   
   for (let c = 0; c < 5; c++) {
-    let stagger = c * (isTurbo ? 50 : 150);
+    let stagger = c * (isTurbo ? 100 : 250);
     promises.push(animateReel(c, matrix[c], moneyMatrix[c], baseDuration + stagger));
   }
 
@@ -336,33 +394,76 @@ async function triggerSpin() {
   btnSpin.disabled = true;
   btnSpin.innerText = '...';
   btnSpin.style.background = '';
+  
+  reelsFrame.classList.remove('is-spinning');
 
   await evaluateRound(matrix, moneyMatrix);
 }
 
-function animateReel(colIdx, symbols, moneys, duration) {
+function animateReel(colIdx, finalSymbols, finalMoneys, duration) {
   return new Promise(function(resolve) {
     const reel = document.getElementById('reel-' + colIdx);
+    
+    const oldChildren = reel.children;
+    const currentCells = [];
+    for (let i = 0; i < oldChildren.length; i++) {
+        currentCells.push(oldChildren[i]);
+    }
+    
+    const newStrip = document.createElement('div');
+    newStrip.className = 'reel-strip';
+
+    for(let r = 0; r < 3; r++) {
+        newStrip.appendChild(renderCell(finalSymbols[r], finalMoneys[r]));
+    }
+
+    const fillerCount = isTurbo ? 8 : 18;
+    for(let i = 0; i < fillerCount; i++) {
+        let symKey = getRandomSymbol();
+        let mVal = SYMBOLS[symKey].type === 'fish' ? SYMBOLS[symKey].money[0] : null;
+        let cell = renderCell(symKey, mVal);
+        cell.classList.add('blur-spin'); 
+        newStrip.appendChild(cell);
+    }
+
+    for(let i = 0; i < currentCells.length; i++) {
+        let clone = currentCells[i].cloneNode(true);
+        clone.classList.remove('win-highlight', 'highlight-fish'); 
+        newStrip.appendChild(clone);
+    }
+
+    reel.innerHTML = '';
+    reel.appendChild(newStrip);
+
+    newStrip.style.transform = 'translateY(calc(-100% + 3 * var(--cell-h)))';
+
+    void newStrip.offsetWidth;
+
     playSfx('spin');
-    reel.style.filter = 'blur(2px)';
+
+    newStrip.style.transition = 'transform ' + duration + 'ms cubic-bezier(0.2, 0.8, 0.2, 1.05)';
+    newStrip.style.transform = 'translateY(0)';
 
     let resolved = false;
-    let timeoutId;
 
     const stopFn = function() {
       if (resolved) return;
       resolved = true;
-      clearTimeout(timeoutId);
+      
+      playSfx('reel-stop'); 
+      
       reel.innerHTML = '';
-      for (let r = 0; r < 3; r++) {
-        reel.appendChild(renderCell(symbols[r], moneys[r]));
+      for(let r = 0; r < 3; r++) {
+          reel.appendChild(renderCell(finalSymbols[r], finalMoneys[r]));
       }
-      reel.style.filter = 'none';
+      
       resolve();
     };
 
     activeSpins.push(stopFn);
-    timeoutId = setTimeout(stopFn, duration);
+
+    newStrip.addEventListener('transitionend', stopFn);
+    setTimeout(stopFn, duration + 50);
   });
 }
 
@@ -461,6 +562,11 @@ async function evaluateRound(matrix, moneyMatrix) {
         
         fishDOMNodes.forEach(function(fishNode) {
           fishNode.el.classList.add('highlight-fish');
+          // ASCUNDEM TAG-UL ORIGINAL de bani de pe peste cand incepe animatia
+          let tag = fishNode.el.querySelector('.money-tag');
+          if (tag) {
+              tag.style.opacity = '0';
+          }
         });
 
         matucaDOMNodes.forEach(function(matucaEl) {
@@ -497,13 +603,20 @@ async function evaluateRound(matrix, moneyMatrix) {
     }
     
     fsTotalWin += totalSpinWin;
+    winEl.innerText = fsTotalWin.toFixed(2);
   }
 
-  if (totalSpinWin > 0) {
-    balance += totalSpinWin;
-    winEl.innerText = totalSpinWin.toFixed(2);
-    playSfx('win');
-    if (!isFreeSpins) statusEl.innerText = 'Câștig pe linie: +' + totalSpinWin.toFixed(2) + ' Lei!';
+  if (!isFreeSpins) {
+    if (totalSpinWin > 0) {
+        balance += totalSpinWin; 
+        winEl.innerText = totalSpinWin.toFixed(2);
+        playSfx('win');
+        statusEl.innerText = 'Câștig pe linie: +' + totalSpinWin.toFixed(2) + ' Lei!';
+    }
+  } else {
+    if (totalSpinWin > 0) {
+        playSfx('win');
+    }
   }
 
   updateUI();
@@ -523,6 +636,40 @@ async function evaluateRound(matrix, moneyMatrix) {
 }
 
 /* =========================================================================
+   ANIMATIE TRANSFER BANI 
+   ========================================================================= */
+function animateWinToBalance(amount) {
+    return new Promise(function(resolve) {
+      const wRect = winEl.getBoundingClientRect();
+      const bRect = balanceEl.getBoundingClientRect();
+  
+      const flyEl = document.createElement('div');
+      flyEl.className = 'flying-money';
+      flyEl.innerText = '+' + amount.toFixed(2);
+      
+      flyEl.style.left = wRect.left + 'px';
+      flyEl.style.top = wRect.top + 'px';
+      document.body.appendChild(flyEl);
+      
+      void flyEl.offsetWidth; 
+      
+      flyEl.style.left = bRect.left + 'px';
+      flyEl.style.top = bRect.top + 'px';
+      flyEl.style.transform = 'scale(0.5)';
+      flyEl.style.opacity = '0';
+      
+      playSfx('win');
+      
+      setTimeout(function() { 
+        flyEl.remove(); 
+        balance += amount; 
+        updateUI();
+        resolve(); 
+      }, 1850);
+    });
+}
+
+/* =========================================================================
    SPECIALĂ & MECANICA DE ÎNEC CU DR. LUPU
    ========================================================================= */
 function startFreeSpins() {
@@ -532,12 +679,14 @@ function startFreeSpins() {
   fsTotalWin = 0; 
   fsBar.classList.remove('hidden');
   fsCountEl.innerText = fsRemaining;
+  winEl.innerText = "0.00"; 
   
-  for(let i=1; i<=20; i++) {
+  const totalIcons = CONFIG.matucaPerPrag * 4;
+  for(let i=1; i<=totalIcons; i++) {
     let icon = document.getElementById('mat-icon-' + i);
     if(icon) icon.classList.remove('collected');
   }
-  activateMultTag(0);
+  activateMultTag(0); 
   
   isSpinning = false;
   btnSpin.disabled = false;
@@ -545,42 +694,45 @@ function startFreeSpins() {
 }
 
 function updateCollectorProgress() {
-  for (let i = 1; i <= Math.min(matucaCount, 20); i++) {
+  let p = CONFIG.matucaPerPrag;
+  const totalNecesar = p * 4;
+  
+  for (let i = 1; i <= Math.min(matucaCount, totalNecesar); i++) {
     let icon = document.getElementById('mat-icon-' + i);
     if (icon && !icon.classList.contains('collected')) {
       icon.classList.add('collected');
     }
   }
 
-  if (matucaCount >= 20 && fsLevel < 4) {
+  if (matucaCount >= p*4 && fsLevel < 4) {
     fsLevel = 4;
-    fsRemaining += 10;
-    activateMultTag(4);
-    showEventModal('🔥', 'MAȚUCA 10X!', 'Nivel Maxim pe Baraj! +10 Rotiri cu Multiplicator 10x!');
-  } else if (matucaCount >= 15 && fsLevel < 3) {
+    fsRemaining += CONFIG.rotiriExtraPrag;
+    activateMultTag(4); 
+    showEventModal('🔥', 'MAȚUCA 10X!', 'Nivel Maxim pe Baraj! +' + CONFIG.rotiriExtraPrag + ' Rotiri!');
+  } else if (matucaCount >= p*3 && fsLevel < 3) {
     fsLevel = 3;
-    fsRemaining += 10;
-    activateMultTag(3);
-    showEventModal('⭐', 'MAȚUCA 5X!', 'Nivelul 3 atins! +10 Rotiri cu Multiplicator 5x!');
-  } else if (matucaCount >= 10 && fsLevel < 2) {
+    fsRemaining += CONFIG.rotiriExtraPrag;
+    activateMultTag(3); 
+    showEventModal('⭐', 'MAȚUCA 5X!', 'Nivelul 3 atins! +' + CONFIG.rotiriExtraPrag + ' Rotiri!');
+  } else if (matucaCount >= p*2 && fsLevel < 2) {
     fsLevel = 2;
-    fsRemaining += 10;
-    activateMultTag(2);
-    showEventModal('⚡', 'MAȚUCA 3X!', 'Nivelul 2 atins! +10 Rotiri cu Multiplicator 3x!');
-  } else if (matucaCount >= 5 && fsLevel < 1) {
+    fsRemaining += CONFIG.rotiriExtraPrag;
+    activateMultTag(2); 
+    showEventModal('⚡', 'MAȚUCA 3X!', 'Nivelul 2 atins! +' + CONFIG.rotiriExtraPrag + ' Rotiri!');
+  } else if (matucaCount >= p*1 && fsLevel < 1) {
     fsLevel = 1;
-    fsRemaining += 10;
-    activateMultTag(1);
-    showEventModal('🎣', 'MAȚUCA 2X!', 'Primul prag atins! +10 Rotiri cu Multiplicator 2x!');
+    fsRemaining += CONFIG.rotiriExtraPrag;
+    activateMultTag(1); 
+    showEventModal('🎣', 'MAȚUCA 2X!', 'Primul prag atins! +' + CONFIG.rotiriExtraPrag + ' Rotiri!');
   }
 
   fsCountEl.innerText = fsRemaining;
 }
 
 function activateMultTag(level) {
-  for(let i=0; i<=4; i++) {
+  for(let i = 1; i <= 4; i++) {
     let tag = document.getElementById('mult-' + i);
-    if(tag) {
+    if (tag) {
       if (i <= level) tag.classList.add('active');
       else tag.classList.remove('active');
     }
@@ -590,10 +742,10 @@ function activateMultTag(level) {
 async function handleEndOfFreeSpins() {
   await new Promise(function(r) { setTimeout(r, 1000); });
 
-  if (matucaCount < 5) {
+  if (matucaCount < CONFIG.matucaPerPrag) {
     await showEventModal('assets/matuca.png', 'MAȚUCA SE ÎNEACĂ!', 'Nu a atins pragul și a căzut de pe baraj în apă!');
 
-    const doctorSaves = Math.random() < 0.5;
+    const doctorSaves = Math.random() < CONFIG.sansaSalvareLupu;
 
     if (doctorSaves) {
       await new Promise(function(r) { setTimeout(r, 800); }); 
@@ -604,12 +756,16 @@ async function handleEndOfFreeSpins() {
       
       btnSpin.disabled = false;
       btnSpin.innerText = 'LANSEAZĂ';
-      return;
+      return; 
     } else {
-      await showEventModal('⚰️', 'A ÎNGHIȚIT PREA MULTĂ APĂ...', 'Dr. Lupu nu a ajuns la timp. Câștig total în specială: ' + fsTotalWin.toFixed(2) + ' Lei!');
+      await showEventModal('⚰️', 'A ÎNGHIȚIT PREA MULTĂ APĂ...', 'Dr. Lupu nu a ajuns la timp. Câștig total: ' + fsTotalWin.toFixed(2) + ' Lei!');
     }
   } else {
     await showEventModal('🏆', 'PARTIDĂ FINALIZATĂ!', 'Felicitări! Câștig total în specială: ' + fsTotalWin.toFixed(2) + ' Lei!');
+  }
+
+  if (fsTotalWin > 0) {
+      await animateWinToBalance(fsTotalWin);
   }
 
   isFreeSpins = false;
